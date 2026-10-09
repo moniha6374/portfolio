@@ -8,6 +8,49 @@ window.addEventListener('scroll', () => {
   }
 });
 
+// Typing animation
+const typedTextElement = document.getElementById('typed-text');
+const textArray = [
+  'Computer Science & Engineering Student',
+  'AI & ML Enthusiast',
+  'Python Developer',
+  'Problem Solver'
+];
+let textIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingSpeed = 120;
+
+function typeText() {
+  const currentText = textArray[textIndex];
+  
+  if (!isDeleting) {
+    typedTextElement.textContent = currentText.substring(0, charIndex + 1);
+    charIndex++;
+    typingSpeed = 120;
+    
+    if (charIndex === currentText.length) {
+      isDeleting = true;
+      typingSpeed = 2000; // Pause at end
+    }
+  } else {
+    typedTextElement.textContent = currentText.substring(0, charIndex - 1);
+    charIndex--;
+    typingSpeed = 60;
+    
+    if (charIndex === 0) {
+      isDeleting = false;
+      textIndex = (textIndex + 1) % textArray.length;
+      typingSpeed = 500; // Pause before next text
+    }
+  }
+  
+  setTimeout(typeText, typingSpeed);
+}
+
+// Start typing animation
+typeText();
+
 // Hamburger menu toggle
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
@@ -71,9 +114,24 @@ window.addEventListener('scroll', () => {
   });
 
   navItems.forEach(link => {
-    link.style.color = '';
+    link.classList.remove('active');
     if (link.getAttribute('href') === `#${current}`) {
-      link.style.color = '#a78bfa';
+      link.classList.add('active');
     }
   });
+});
+
+// Back to top button
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 400) {
+    backToTop.classList.add('show');
+  } else {
+    backToTop.classList.remove('show');
+  }
+});
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
